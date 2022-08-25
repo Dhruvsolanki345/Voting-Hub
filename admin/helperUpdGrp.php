@@ -3,7 +3,7 @@
 
   $sql = "UPDATE grp SET name = '{$_POST['name']}', leader = '{$_POST['leader']}' WHERE id = {$_POST['id']}";
 
-  echo $sql;
+  // echo $sql;
 
   if ($conn->query($sql) === TRUE) {
     header('Location: displaygrp.php');
