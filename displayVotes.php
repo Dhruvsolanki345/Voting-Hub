@@ -42,7 +42,7 @@
         </thead>
         <tbody>
           <?php
-            $url = "http://localhost/wp2/votingHub/api/getGrp.php";
+            $url = "https://voting-hub.000webhostapp.com/api/getGrp.php";
             $client = curl_init($url);
             curl_setopt($client, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($client);

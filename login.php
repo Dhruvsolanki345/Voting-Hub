@@ -10,7 +10,7 @@ if ($_SESSION['loginMethod'] == "username") {
 $result = $conn->query($sql);
 
 if($result->num_rows == 0){
-  header("Location: http://localhost/wp2/votingHub?alert=No Account Present With This User Details");
+  header("Location: https://voting-hub.000webhostapp.com?alert=No Account Present With This User Details");
   exit();
 }
 
