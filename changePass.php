@@ -1,6 +1,46 @@
 <?php
 include 'helper.php';
 session_start();
+
+$pass = $confirmPass = $passErr = $confirmPassErr = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+  if (empty($_POST["pass"])) {
+    $passErr = "Password is required";
+  } else {
+    $pass = test_input($_POST["pass"]);
+    if (!preg_match("/^.{1,}$/", $pass)) {
+      $passErr = "Minimum 1 character required";
+    } else if (preg_match("/^.{17,}$/", $pass)) {
+      $passErr = "Maximum 16 character required";
+    }
+  }
+// echo $_POST["confirmPass"];
+  if (empty($_POST["confirmPass"])) {
+    $confirmPassErr = "Confirm Password is required";
+  } else {
+    $confirmPass = test_input($_POST["confirmPass"]);
+    if($confirmPass != $pass){
+      $confirmPassErr = "Password doesn't match";
+    }
+  }
+
+  if($passErr == "" && $confirmPassErr == ""){
+    $sql = "update users set pass = ".$pass." where id = ".$_SESSION['uid'];
+    $_SESSION['pass'] = $pass;
+    if($conn->query($sql) == TRUE){
+      header("Location: home.php");
+      exit();
+    }
+  }
+}
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,48 +74,6 @@ session_start();
       </ul>
     </div>
   </nav>
-
-  <?php 
-  $pass = $confirmPass = $passErr = $confirmPassErr = "";
-
-  if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-    if (empty($_POST["pass"])) {
-      $passErr = "Password is required";
-    } else {
-      $pass = test_input($_POST["pass"]);
-      if (!preg_match("/^.{1,}$/", $pass)) {
-        $passErr = "Minimum 1 character required";
-      } else if (preg_match("/^.{17,}$/", $pass)) {
-        $passErr = "Maximum 16 character required";
-      }
-    }
-echo $_POST["confirmPass"];
-    if (empty($_POST["confirmPass"])) {
-      $confirmPassErr = "Confirm Password is required";
-    } else {
-      $confirmPass = test_input($_POST["confirmPass"]);
-      if($confirmPass != $pass){
-        $confirmPassErr = "Password doesn't match";
-      }
-    }
-
-    if($passErr == "" && $confirmPassErr == ""){
-      $sql = "update users set pass = ".$pass." where id = ".$_SESSION['uid'];
-      $_SESSION['pass'] = $pass;
-      if($conn->query($sql) == TRUE){
-        header("Location: home.php");
-        exit();
-      }
-    }
-  }
-  function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-  }
-?> 
 
   <div class="row d-flex justify-content-center align-items-center h-100 pt-5">
     <div class="col-lg-8 col-xl-5">
